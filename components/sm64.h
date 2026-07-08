@@ -589,11 +589,20 @@ namespace SM64 {
 				aCollisionTris.clear();
 				aCollisionBarriers.clear();
 
-				auto col = (WCollider*)ply->GetWCollider();
-				for (int i = 0; i < col->fInstanceCacheList.size(); i++) {
-					auto inst = col->fInstanceCacheList[i];
-					ProcessCollisionArticle(inst);
+				for (int i = 0; i < 2700; i++) {
+					auto pack = WCollisionAssets::mCollisionPackList[i];
+					if (!pack) continue;
+
+					for (int j = 0; j < pack->mInstanceNum; j++) {
+						ProcessCollisionArticle(&pack->mInstanceList[j]);
+					}
 				}
+
+				//auto col = (WCollider*)ply->GetWCollider();
+				//for (int i = 0; i < col->fInstanceCacheList.size(); i++) {
+				//	auto inst = col->fInstanceCacheList[i];
+				//	ProcessCollisionArticle(inst);
+				//}
 
 				UpdateMarioCollision();
 #ifndef RENDER_NFS_COLLISIONS
@@ -688,7 +697,7 @@ namespace SM64 {
 			if (IsKeyPressed(VK_CONTROL)) {
 				marioInputs.buttonZ = 1;
 			}
-			if (IsKeyPressed(VK_LBUTTON)) {
+			if (IsKeyPressed(VK_LBUTTON) || IsKeyPressed(VK_SHIFT)) {
 				marioInputs.buttonB = 1;
 			}
 		}
