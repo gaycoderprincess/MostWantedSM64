@@ -268,6 +268,13 @@ bool IsInCareerMode() {
 	return GRaceStatus::fObj && GRaceStatus::fObj->mRaceContext == GRace::kRaceContext_Career;
 }
 
+bool IsInPursuit() {
+	if (auto ply = GetLocalPlayerInterface<IPerpetrator>()) {
+		return ply->IsBeingPursued();
+	}
+	return false;
+}
+
 wchar_t gDLLDir[MAX_PATH];
 class DLLDirSetter {
 public:

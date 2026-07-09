@@ -77,14 +77,6 @@ void Render3DLoop() {
 	CommonMain(false);
 }
 
-float __thiscall GetTopSpeedHooked(IVehicle* pThis) {
-	return 0.01;
-}
-
-float __thiscall GetAccelerationHooked(IVehicle* pThis, float a2) {
-	return 0.01;
-}
-
 void M64ModMenu() {
 	DLLDirSetter _setdir;
 
@@ -128,6 +120,15 @@ void M64ModMenu() {
 				v.y -= 1;
 			}
 
+			SM64::ResetMario(v);
+		}
+
+		auto worldFacing = SM64::GetMarioWorldFacing();
+		DrawMenuOption(std::format("facing {:.2f} {:.2f} {:.2f}",worldFacing[0],worldFacing[1],worldFacing[2]));
+
+		if (DrawMenuOption("mario teleport fwd")) {
+			auto v = SM64::GetMarioWorldPos();
+			v += SM64::GetMarioWorldFacing() * 5;
 			SM64::ResetMario(v);
 		}
 
@@ -181,9 +182,6 @@ BOOL WINAPI DllMain(HINSTANCE, DWORD fdwReason, LPVOID) {
 			NyaHooks::CameraMoverHook::aFunctions.push_back(CameraHook);
 			NyaHooks::RenderWorldHook::Init();
 			NyaHooks::RenderWorldHook::aPostFunctions.push_back(Render3DLoop);
-
-			NyaHookLib::Patch(0x892A64, &GetTopSpeedHooked);
-			NyaHookLib::Patch(0x892A68, &GetAccelerationHooked);
 
 			//SkipFE = true;
 		} break;
