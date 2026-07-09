@@ -275,6 +275,7 @@ bool IsInPursuit() {
 	return false;
 }
 
+// SetCurrentDirectoryW causes performance drops so only use when needed
 wchar_t gDLLDir[MAX_PATH];
 class DLLDirSetter {
 public:
@@ -282,9 +283,11 @@ public:
 
 	DLLDirSetter() {
 		GetCurrentDirectoryW(MAX_PATH, backup);
+		if (!wcscmp(backup, gDLLDir)) return;
 		SetCurrentDirectoryW(gDLLDir);
 	}
 	~DLLDirSetter() {
+		if (!wcscmp(backup, gDLLDir)) return;
 		SetCurrentDirectoryW(backup);
 	}
 };
