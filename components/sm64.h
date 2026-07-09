@@ -697,8 +697,8 @@ namespace SM64 {
 			gCollisionTimer.Process();
 
 #ifndef RENDER_NFS_COLLISIONS
-			if (gCollisionTimer.fTotalTime >= 0.25) {
-				gCollisionTimer.fTotalTime -= 0.25;
+			if ((gCollisionTimer.fTotalTime >= 0.5 && GetMarioWorldVelocity().length() > 0.0) || bDoReset) {
+				gCollisionTimer.fTotalTime -= 0.5;
 #endif
 
 				aCollisionTris.clear();
