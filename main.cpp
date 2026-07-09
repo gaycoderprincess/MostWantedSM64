@@ -31,6 +31,7 @@ void HookLoop() {}
 #include "hooks/carrender.h"
 
 #include "include/surface_terrains.h"
+#include "include/audio_defines.h"
 #include "include/sm64_defs.h"
 #include "include/libsm64.h"
 #include "components/sm64.h"
