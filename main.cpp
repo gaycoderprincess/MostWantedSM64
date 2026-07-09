@@ -189,6 +189,8 @@ BOOL WINAPI DllMain(HINSTANCE, DWORD fdwReason, LPVOID) {
 			NyaHooks::RenderWorldHook::aPostFunctions.push_back(Render3DLoop);
 
 			//SkipFE = true;
+
+			SM64::EnableMario();
 		} break;
 		default:
 			break;

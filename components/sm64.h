@@ -554,11 +554,17 @@ namespace SM64 {
 	bool bAvailable = false;
 	double fTimeSinceLastAttacked = 0.0;
 
+	void EnableMario() {
+		bEnabled = true;
+		NyaHookLib::Patch<uint8_t>(0x6B1A02, 0xEB); // disable player causality check for cop flipping
+	}
+
 	void DisableMario() {
 		bEnabled = false;
 		CarRender_DontRenderPlayer = false;
 		DrawLightFlares = true;
 		DrawCars = true;
+		NyaHookLib::Patch<uint8_t>(0x6B1A02, 0x74);
 	}
 
 	NyaVec3 GetMarioWorldPos() {
@@ -666,6 +672,15 @@ namespace SM64 {
 				//	MarioInteract_KnockAway(rb);
 				//}
 			}
+		}
+	}
+
+	void MarioCarInheritance() {
+		auto ply = GetLocalPlayerInterface<ISpikeable>();
+		if (ply && ply->GetNumBlowouts() > 0) {
+			GetLocalPlayerInterface<IDamageable>()->ResetDamage();
+
+			sm64_set_mario_action_arg(SM64::marioId, ACT_LAVA_BOOST, 1);
 		}
 	}
 
@@ -819,6 +834,7 @@ namespace SM64 {
 
 		if (!FEManager::mPauseRequest) {
 			MarioObjectInteractions();
+			MarioCarInheritance();
 
 			sm64_set_sound_volume(GetSFXVolume());
 
@@ -959,5 +975,11 @@ namespace SM64 {
 		//if (heavyDamage) {
 		//	sm64_set_mario_forward_velocity(SM64::marioId, 150);
 		//}
+	}
+
+	void TakeLavaDamage() {
+		if (!bEnabled) return;
+
+		sm64_set_mario_action_arg(SM64::marioId, ACT_LAVA_BOOST, 1);
 	}
 }
