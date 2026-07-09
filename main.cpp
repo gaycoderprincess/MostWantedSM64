@@ -137,6 +137,10 @@ void M64ModMenu() {
 			sm64_mario_take_damage(SM64::marioId, 1, 0, 0, 0, 0);
 		}
 
+		if (DrawMenuOption("add wing cap")) {
+			sm64_mario_interact_cap(SM64::marioId, MARIO_WING_CAP, 0, 0);
+		}
+
 		if (!SM64::aCollisionTris.empty()) {
 			auto col = SM64::aCollisionTris[0];
 			DrawMenuOption(std::format("col 0 {:.2f} {:.2f} {:.2f}",col.fPt0[0],col.fPt0[1],col.fPt0[2]));
