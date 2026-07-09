@@ -617,7 +617,7 @@ namespace SM64 {
 						if (auto dam = car->mCOMObject->Find<IEngineDamage>()) {
 							dam->Blow();
 						}
-						else if (auto dam = car->mCOMObject->Find<IDamageable>()) {
+						if (auto dam = car->mCOMObject->Find<IDamageable>()) {
 							dam->Destroy();
 						}
 					}
