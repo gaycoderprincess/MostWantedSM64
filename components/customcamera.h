@@ -190,7 +190,13 @@ namespace CustomCamera {
 		vPosChange += mat.y * fMouse[1] * -fMouseRotateSpeed * fPanSpeedBase;
 		vPos -= vPosChange;
 
-		auto velocity = *player->GetPosition() - vLastPlayerPosition;
+		auto currPlayerPos = *player->GetPosition();
+		if (IsMario()) {
+			currPlayerPos = SM64::MarioToWorld({SM64::marioState.position[0], SM64::marioState.position[1], SM64::marioState.position[2]});
+			currPlayerPos.y += 1 * SM64::GetMarioScale();
+		}
+
+		auto velocity = currPlayerPos - vLastPlayerPosition;
 		if ((vPos - *GetFollowPosition(player)).length() >= GetMaxStringDistance(player) * 0.999) {
 			velocity *= fStringVelocityMult;
 		}
@@ -200,7 +206,7 @@ namespace CustomCamera {
 		}
 
 		vPos -= vLastPlayerPosition;
-		vPos += *player->GetPosition();
+		vPos += currPlayerPos;
 		if (fMouseTimer <= 0) {
 			vPos -= velocity;
 			DoCamString();
@@ -214,7 +220,7 @@ namespace CustomCamera {
 			vPos.y = lookat->y + fStringMaxYDiff;
 		}
 
-		vLastPlayerPosition = *player->GetPosition();
+		vLastPlayerPosition = currPlayerPos;
 
 		mat.p = WorldToRenderCoords(vPos);
 		ApplyCameraMatrix(pCam, mat);
