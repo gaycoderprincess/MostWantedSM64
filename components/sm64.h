@@ -785,9 +785,9 @@ namespace SM64 {
 			}
 		}
 
-		MarioObjectInteractions();
-
 		if (!FEManager::mPauseRequest) {
+			MarioObjectInteractions();
+
 			sm64_set_sound_volume(GetSFXVolume());
 
 			static CNyaTimer gTimer;
