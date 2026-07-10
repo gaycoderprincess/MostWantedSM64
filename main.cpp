@@ -94,6 +94,10 @@ void M64ModMenu() {
 			SM64::DisableMario();
 		}
 
+		if (DrawMenuOption("mario music")) {
+			sm64_play_music(0, 0x03, 0);
+		}
+
 		QuickValueEditor("marioLightness", SM64::marioLightness);
 		QuickValueEditor("marioLightnessMenu", SM64::marioLightnessMenu);
 
