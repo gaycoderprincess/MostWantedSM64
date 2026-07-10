@@ -61,8 +61,8 @@ namespace SM64 {
 		return out;
 	}
 
-	int marioLightness = 64;
-	int marioLightnessMenu = 64;
+	int marioLightness = 255;
+	int marioLightnessMenu = 255;
 
 	bool bInvincibleFlash = false;
 
