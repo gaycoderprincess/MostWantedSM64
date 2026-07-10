@@ -56,8 +56,8 @@ namespace SM64 {
 		return out;
 	}
 
-	int marioLightness = 100;
-	int marioLightnessMenu = 96;
+	int marioLightness = 64;
+	int marioLightnessMenu = 64;
 
 	bool bInvincibleFlash = false;
 
@@ -112,6 +112,7 @@ namespace SM64 {
 			dest->vPos[2] = tmpPos[2];
 
 			auto tmpNormal = MarioToWorld_Render({srcNormal[0], srcNormal[1], srcNormal[2]});
+			tmpNormal.Normalize();
 
 			dest->vNormals[0] = tmpNormal[0];
 			dest->vNormals[1] = tmpNormal[1];
