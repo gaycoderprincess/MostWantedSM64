@@ -56,7 +56,8 @@ namespace SM64 {
 		return out;
 	}
 
-	int marioLightness = 128;
+	int marioLightness = 100;
+	int marioLightnessMenu = 96;
 
 	bool bInvincibleFlash = false;
 
@@ -93,6 +94,8 @@ namespace SM64 {
 			return;
 		}
 
+		int lightness = TheGameFlowManager.CurrentGameFlowState == GAMEFLOW_STATE_IN_FRONTEND ? marioLightnessMenu : marioLightness;
+
 		int numFacesUsed = marioBuffers.numTrianglesUsed;
 		int numVerticesUsed = marioBuffers.numTrianglesUsed*3;
 		for (int i = 0; i < numVerticesUsed; i++) {
@@ -127,20 +130,26 @@ namespace SM64 {
 
 			auto tmp = NyaDrawing::CNyaRGBA32();
 			if (textured) {
-				tmp.b = marioLightness;
-				tmp.g = marioLightness;
-				tmp.r = marioLightness;
+				tmp.b = lightness;
+				tmp.g = lightness;
+				tmp.r = lightness;
 			}
 			else {
-				tmp.b = srcColor[0] * marioLightness;
-				tmp.g = srcColor[1] * marioLightness;
-				tmp.r = srcColor[2] * marioLightness;
+				tmp.b = srcColor[0] * lightness;
+				tmp.g = srcColor[1] * lightness;
+				tmp.r = srcColor[2] * lightness;
 			}
 			tmp.a = 255;
 			dest->Color = *(uint32_t*)&tmp;
 
-			dest->vUV[0] = srcUV[0];
-			dest->vUV[1] = srcUV[1];
+			if (textured && (srcUV[0] != 1 && srcUV[1] != 1)) {
+				dest->vUV[0] = srcUV[0];
+				dest->vUV[1] = srcUV[1];
+			}
+			else {
+				dest->vUV[0] = 0.5;
+				dest->vUV[1] = 0.5;
+			}
 		}
 		for (int i = 0; i < numFacesUsed*3; i++) {
 			indicesOut[i] = i;
