@@ -11,7 +11,19 @@ A mod for Need for Speed: Most Wanted that adds Mario from Super Mario 64
 ## Disclaimer
 
 Due to the current programming landscape, I feel that it's necessary to explicitly state that this project had zero assistance or any other kind of involvement from any sort of "AI agent" and it never will.  
-This mod was entirely built by hand, by a human being, and I believe that any project that cannot also claim this about themselves is not worth people's time.
+This mod was entirely built by hand, by a human being, and I believe that any project that cannot also claim this about itself is not worth people's time.
+
+## Features
+
+- Mario uses XInput bindings, with A bound to A, B bound to B, and Z bound to X/LB/RB
+- On keyboard, use the arrow keys, space, left control and the left mouse button to control Mario
+- You can resize Mario by editing the world_scale value in `NFSMWSM64_gcp.toml`
+
+## Known issues
+
+- Mario makes skidmarks sometimes
+- Since you can jump really high now, it's trivially easy to overshoot the checkpoints in races
+- Mario is bound to your car's physics model, therefore collisions with other cars and smackable objects can be wonky at times
 
 ## Building
 
