@@ -8,6 +8,11 @@ A mod for Need for Speed: Most Wanted that adds Mario from Super Mario 64
 - Plop the files into your game folder, and place a ROM of the US version of Super Mario 64 next to the files, renamed `baserom.us.z64`.
 - Enjoy, nya~ :3
 
+## Disclaimer
+
+Due to the current programming landscape, I feel that it's necessary to explicitly state that this project had zero assistance or any other kind of involvement from any sort of "AI agent" and it never will.  
+This mod was entirely built by hand, by a human being, and I believe that any project that cannot also claim this about themselves is not worth people's time.
+
 ## Building
 
 Building is done on an Arch Linux system with CLion being used for the build process. 
