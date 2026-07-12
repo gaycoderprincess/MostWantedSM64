@@ -617,7 +617,7 @@ namespace SM64 {
 			bDoReset = true;
 			return;
 		}
-		if (IsInLoadingScreen()) {
+		if (IsInLoadingScreen() || IsInMovie()) {
 			bDoReset = true;
 			return;
 		}
