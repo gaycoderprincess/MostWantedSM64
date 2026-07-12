@@ -746,6 +746,13 @@ namespace SM64 {
 			}
 		}
 
+		auto stick = NyaVec3(marioInputs.stickX, marioInputs.stickY, 0);
+		if (stick.length() > 1.0) {
+			stick.Normalize();
+			marioInputs.stickX = stick.x;
+			marioInputs.stickY = stick.y;
+		}
+
 		if (!FEManager::mPauseRequest) {
 			MarioObjectInteractions();
 			MarioCarInheritance();
