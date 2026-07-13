@@ -571,6 +571,20 @@ namespace SM64 {
 				else if (interaction == INT_HIT_FROM_ABOVE || interaction == INT_HIT_FROM_BELOW) {
 					if (dist < fJumpAttackRange) {
 						sm64_mario_attack(marioId, pos.x, pos.y, pos.z, dim.y * marioScalar);
+
+						// jumping on weak cops kills them
+						auto name = car->GetVehicleName();
+						if (!strcmp(name, "copmidsize") || !strcmp(name, "copghost")) {
+							if (auto dam = car->mCOMObject->Find<IEngineDamage>()) {
+								if (!dam->IsBlown()) dam->Blow();
+							}
+							if (auto dam = car->mCOMObject->Find<IDamageable>()) {
+								if (!dam->IsDestroyed()) {
+									dam->Destroy();
+									sm64_play_sound_global(SOUND_GENERAL_BREAK_BOX);
+								}
+							}
+						}
 					}
 				}
 				// punches & kicks throw forward
@@ -790,14 +804,20 @@ namespace SM64 {
 			bInvincibleFlash = !bInvincibleFlash;
 		}
 
-		RenderMario<0, false>(marioGeometry);
-		RenderMario<0, true>(marioGeometry);
-
 		static bool bOnce = true;
 		if (bOnce) {
 			aDrawing3DLoopFunctionsOnce.push_back(InitAudio);
 			bOnce = false;
 		}
+	}
+
+	void OnTick3D() {
+		if (!bEnabled) return;
+		if (TheGameFlowManager.CurrentGameFlowState != GAMEFLOW_STATE_RACING && TheGameFlowManager.CurrentGameFlowState != GAMEFLOW_STATE_IN_FRONTEND) return;
+		if (IsInLoadingScreen() || IsInMovie()) return;
+
+		RenderMario<0, false>(marioGeometry);
+		RenderMario<0, true>(marioGeometry);
 	}
 
 	void OnAudioTick() {
@@ -865,7 +885,8 @@ namespace SM64 {
 		memset(marioGeometry.normal, 0, sizeof(float)*9*SM64_GEO_MAX_TRIANGLES);
 		memset(marioGeometry.uv, 0, sizeof(float)*6*SM64_GEO_MAX_TRIANGLES);
 
-		aDrawing3DLoopFunctions.push_back(OnTick);
+		aDrawing3DLoopFunctions.push_back(OnTick3D);
+		aDrawingLoopFunctions.push_back(OnTick);
 		//aDrawing3DLoopFunctionsOnce.push_back(InitAudio);
 
 		bAvailable = true;

@@ -10,6 +10,17 @@ namespace CustomCamera {
 		return SM64::bEnabled && TheGameFlowManager.CurrentGameFlowState == GAMEFLOW_STATE_RACING && !IsInLoadingScreen();
 	}
 
+	double fMarioDelayFactor = 0.0;
+	bool IsMarioDelayed() {
+		return (SM64::marioState.action & ACT_FLAG_AIR) != 0;
+	}
+
+	UMath::Vector3 GetMarioDelayVector() {
+		auto v = SM64::GetMarioWorldVelocity();
+		v.y = 0;
+		return v * (1.0 / 30.0);
+	}
+
 	bool bSecondPersonOrbitMode = true;
 
 	const float fPanSpeedBase = 0.005;
@@ -88,6 +99,7 @@ namespace CustomCamera {
 			v = SM64::MarioToWorld({SM64::marioState.position[0], SM64::marioState.position[1], SM64::marioState.position[2]});
 			v.y += 1 * SM64::GetMarioScale();
 			v += GetLookatOffset(ply);
+			v -= GetMarioDelayVector() * fMarioDelayFactor;
 			return &v;
 		}
 
@@ -105,6 +117,7 @@ namespace CustomCamera {
 			v = SM64::MarioToWorld({SM64::marioState.position[0], SM64::marioState.position[1], SM64::marioState.position[2]});
 			v.y += 1 * SM64::GetMarioScale();
 			v += GetFollowOffset(ply);
+			v -= GetMarioDelayVector() * fMarioDelayFactor;
 			return &v;
 		}
 
@@ -238,6 +251,14 @@ namespace CustomCamera {
 	}
 
 	void ProcessCam(Camera* cam, double delta) {
+		if (IsMario() && IsMarioDelayed()) {
+			fMarioDelayFactor += delta * 4;
+		}
+		else {
+			fMarioDelayFactor -= delta * 8;
+		}
+		fMarioDelayFactor = std::clamp(fMarioDelayFactor, 0.0, 1.0);
+
 		//if (auto sensitivity = GetGameSettingByName("MouseSensitivity")) {
 		//	fMouseRotateSpeed = std::lerp(0.25, 4.0, *(int*)sensitivity->value / 100.0);
 		//}

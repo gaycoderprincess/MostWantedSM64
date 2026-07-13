@@ -13,6 +13,7 @@
 
 #include "include/chloemenulib.h"
 
+std::vector<void(*)()> aDrawingLoopFunctions;
 std::vector<void(*)()> aDrawing3DLoopFunctions;
 std::vector<void(*)()> aDrawing3DLoopFunctionsOnce;
 
@@ -45,6 +46,12 @@ void CameraHook(CameraMover* pMover) {
 		gTimer.Process();
 		CustomCamera::SetTargetCar(GetLocalPlayerVehicle(), nullptr);
 		CustomCamera::ProcessCam(pMover->pCamera, gTimer.fDeltaTime);
+	}
+}
+
+void DrawingLoop() {
+	for (auto& func : aDrawingLoopFunctions) {
+		func();
 	}
 }
 
@@ -185,6 +192,8 @@ BOOL WINAPI DllMain(HINSTANCE, DWORD fdwReason, LPVOID) {
 			}
 
 			NyaHooks::LateInitHook::Init();
+			NyaHooks::D3DEndSceneHook::Init();
+			NyaHooks::D3DEndSceneHook::aFunctions.push_back(DrawingLoop);
 			NyaHooks::LateInitHook::aFunctions.push_back([](){
 				if (!GetModuleHandleA("vulkan-1.dll") && !GetModuleHandleA("winevulkan.dll")) {
 					MessageBoxA(nullptr, "WARNING: DXVK is not installed properly! Make sure you've placed d3d9.dll from the mod's archive into the game folder or you WILL encounter stability issues!", "nya?!~", MB_ICONERROR);
