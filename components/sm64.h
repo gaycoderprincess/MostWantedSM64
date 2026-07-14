@@ -546,7 +546,7 @@ namespace SM64 {
 			rb->GetDimension(&dim);
 
 			const float fAttackRange = 6.0 * GetMarioScale();
-			const float fJumpAttackRange = 2.0 * GetMarioScale();
+			const float fJumpAttackRange = 2.5 * GetMarioScale();
 
 			float dist = (*car->GetPosition() - marioPos).length();
 			if (dist < fAttackRange) {
