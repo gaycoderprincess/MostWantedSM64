@@ -556,14 +556,9 @@ namespace SM64 {
 				// ground pound is an instakill
 				if (interaction == INT_GROUND_POUND_OR_TWIRL) {
 					if (dist < fJumpAttackRange && marioState.velocity[1] < -50.0f) { // only kill while moving downwards
-						if (auto dam = car->mCOMObject->Find<IEngineDamage>()) {
-							if (!dam->IsBlown()) dam->Blow();
-						}
-						if (auto dam = car->mCOMObject->Find<IDamageable>()) {
-							if (!dam->IsDestroyed()) {
-								dam->Destroy();
-								sm64_play_sound_global(SOUND_GENERAL_BREAK_BOX);
-							}
+						if (!IsCarDestroyed(car)) {
+							DestroyCar(car);
+							sm64_play_sound_global(SOUND_GENERAL_BREAK_BOX);
 						}
 					}
 				}
@@ -575,14 +570,9 @@ namespace SM64 {
 						// jumping on weak cops kills them
 						auto name = car->GetVehicleName();
 						if (!strcmp(name, "copmidsize") || !strcmp(name, "copghost")) {
-							if (auto dam = car->mCOMObject->Find<IEngineDamage>()) {
-								if (!dam->IsBlown()) dam->Blow();
-							}
-							if (auto dam = car->mCOMObject->Find<IDamageable>()) {
-								if (!dam->IsDestroyed()) {
-									dam->Destroy();
-									sm64_play_sound_global(SOUND_GENERAL_BREAK_BOX);
-								}
+							if (!IsCarDestroyed(car)) {
+								DestroyCar(car);
+								sm64_play_sound_global(SOUND_GENERAL_BREAK_BOX);
 							}
 						}
 					}
@@ -638,7 +628,7 @@ namespace SM64 {
 
 		UMath::Vector3 marioPos = GetMarioWorldPos();
 		UMath::Vector3 marioVel = GetMarioWorldVelocity();
-		if (marioPos.y < -100) {
+		if (marioPos.y < -20) {
 			bDoReset = true;
 		}
 		if (TheGameFlowManager.CurrentGameFlowState == GAMEFLOW_STATE_IN_FRONTEND && marioPos.length() > 50) {

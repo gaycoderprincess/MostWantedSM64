@@ -200,6 +200,17 @@ bool IsCarDestroyed(IVehicle* car, bool tirePopsCount = false) {
 	return car->IsDestroyed();
 }
 
+void DestroyCar(IVehicle* car) {
+	if (auto dam = car->mCOMObject->Find<IEngineDamage>()) {
+		if (!dam->IsBlown()) dam->Blow();
+	}
+	if (auto dam = car->mCOMObject->Find<IDamageable>()) {
+		if (!dam->IsDestroyed()) {
+			dam->Destroy();
+		}
+	}
+}
+
 Camera* GetLocalPlayerCamera() {
 	return eViews[EVIEW_PLAYER1].pCamera;
 }
